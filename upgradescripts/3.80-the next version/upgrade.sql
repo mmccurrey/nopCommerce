@@ -1379,6 +1379,13 @@ set @resources='
   <LocaleResource Name="Admin.RecurringPayments.History.LastPaymentFailed">
     <Value>Last payment failed</Value>
   </LocaleResource>
+  </LocaleResource>  
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.PassPurchasedItems">
+    <Value>Pass purchased items</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalDirect.Fields.PassPurchasedItems.Hint">
+    <Value>Check to pass information about purchased items to PayPal.</Value>
+  </LocaleResource>
 </Language>
 '
 
