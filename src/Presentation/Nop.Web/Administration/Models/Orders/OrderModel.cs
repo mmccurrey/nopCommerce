@@ -29,7 +29,9 @@ namespace Nop.Admin.Models.Orders
         public override int Id { get; set; }
         [NopResourceDisplayName("Admin.Orders.Fields.OrderGuid")]
         public Guid OrderGuid { get; set; }
-
+        [NopResourceDisplayName("Admin.Orders.Fields.CustomOrderNumber")]
+        public string CustomOrderNumber { get; set; }
+        
         //store
         [NopResourceDisplayName("Admin.Orders.Fields.Store")]
         public string StoreName { get; set; }

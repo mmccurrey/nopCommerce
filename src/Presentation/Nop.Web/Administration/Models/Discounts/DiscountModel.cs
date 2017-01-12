@@ -98,8 +98,11 @@ namespace Nop.Admin.Models.Discounts
         {
             public int DiscountId { get; set; }
 
-            [NopResourceDisplayName("Admin.Promotions.Discounts.History.Order")]
+            [NopResourceDisplayName("Admin.Promotions.Discounts.History.OrderId")]
             public int OrderId { get; set; }
+
+            [NopResourceDisplayName("Admin.Promotions.Discounts.History.CustomOrderNumber")]
+            public string CustomOrderNumber { get; set; }
 
             [NopResourceDisplayName("Admin.Promotions.Discounts.History.OrderTotal")]
             public string OrderTotal { get; set; }

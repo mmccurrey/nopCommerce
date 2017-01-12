@@ -100,5 +100,9 @@ namespace Nop.Admin.Models.Settings
 
         [NopResourceDisplayName("Admin.Configuration.Settings.Order.OrderIdent")]
         public int? OrderIdent { get; set; }
+        
+        [NopResourceDisplayName("Admin.Configuration.Settings.Order.CustomOrderNumberPrefix")]
+        public string CustomOrderNumberPrefix { get; set; }
+        public bool CustomOrderNumberPrefix_OverrideForStore { get; set; }
     }
 }

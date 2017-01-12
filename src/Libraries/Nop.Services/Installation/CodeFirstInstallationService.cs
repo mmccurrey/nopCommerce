@@ -4413,6 +4413,8 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow
             };
             _orderRepository.Insert(firstOrder);
+            firstOrder.CustomOrderNumber = firstOrder.Id.ToString();
+            _orderRepository.Update(firstOrder);
 
             //item Apple iCam
             var firstOrderItem1 = new OrderItem()
@@ -4577,6 +4579,8 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow
             };
             _orderRepository.Insert(secondOrder);
+            secondOrder.CustomOrderNumber = secondOrder.Id.ToString();
+            _orderRepository.Update(secondOrder);
 
             //order notes
             _orderNoteRepository.Insert(new OrderNote()
@@ -4693,6 +4697,8 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow
             };
             _orderRepository.Insert(thirdOrder);
+            thirdOrder.CustomOrderNumber = thirdOrder.Id.ToString();
+            _orderRepository.Update(thirdOrder);
 
             //order notes
             _orderNoteRepository.Insert(new OrderNote()
@@ -4835,6 +4841,8 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow
             };
             _orderRepository.Insert(fourthOrder);
+            fourthOrder.CustomOrderNumber = fourthOrder.Id.ToString();
+            _orderRepository.Update(fourthOrder);
 
             //order notes
             _orderNoteRepository.Insert(new OrderNote()
@@ -5044,6 +5052,8 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow
             };
             _orderRepository.Insert(fifthOrder);
+            fifthOrder.CustomOrderNumber = fifthOrder.Id.ToString();
+            _orderRepository.Update(fifthOrder);
 
             //order notes
             _orderNoteRepository.Insert(new OrderNote()
@@ -6129,7 +6139,8 @@ namespace Nop.Services.Installation
                 ActivateGiftCardsAfterCompletingOrder = false,
                 DeactivateGiftCardsAfterCancellingOrder = false,
                 DeactivateGiftCardsAfterDeletingOrder = false,
-                CompleteOrderWhenDelivered = true
+                CompleteOrderWhenDelivered = true,
+                CustomOrderNumberPrefix = "{ID}"
             });
 
             settingService.SaveSetting(new SecuritySettings

@@ -279,6 +279,33 @@
                         @Html.ValidationMessageFor(model => model.CompleteOrderWhenDelivered)
                     </div>
                 </div>
+                <div class="form-group advanced-setting" id="pnlCustomOrderNumberPrefix">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.CustomOrderNumberPrefix_OverrideForStore, model => model.CustomOrderNumberPrefix, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.CustomOrderNumberPrefix)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.CustomOrderNumberPrefix)
+                        @Html.ValidationMessageFor(model => model.CustomOrderNumberPrefix)
+                        <ul class="common-list">
+                            <li>
+                                @T("Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.YYYY")
+                            </li>
+                            <li>
+                                @T("Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.YY")
+                            </li>
+                            <li>
+                                @T("Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.MM")
+                            </li>
+                            <li>
+                                @T("Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.DD")
+                            </li>
+                            <li>
+                                @T("Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.ID")
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
