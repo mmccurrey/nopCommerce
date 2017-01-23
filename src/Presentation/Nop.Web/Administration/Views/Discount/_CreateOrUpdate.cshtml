@@ -453,14 +453,14 @@
             <!-- Discount requirement template -->
             <script id="discountRequirementTemplate" type="text/html">
                 <div class="requirement-container" id="editrequirement{{= DiscountRequirementId }}">
-                    <div class="panel {{if IsGroup}}panel-dark-blue{{else}}panel-light-blue{{/if}}">
+                    <div class="panel {{if IsGroup}}panel-violet{{else}}panel-green{{/if}}">
                         <div class="panel-heading">
                             {{if IsGroup}}
                             @T("Admin.Promotions.Discounts.Requirements.RequirementGroup.Title"): <strong>{{= RuleName }}</strong>
                             {{else}}
                             @T("Admin.Promotions.Discounts.Requirements.DiscountRequirementType"): <strong>{{= RuleName }}</strong>
                             {{/if}}
-                            <button type="button" class="btn btn-link" id="deleterequirement{{= DiscountRequirementId }}" onclick="deleteRequirement({ {= DiscountRequirementId }})">
+                            <button type="button" class="btn btn-link" id="deleterequirement{{= DiscountRequirementId }}" onclick="deleteRequirement({{= DiscountRequirementId }})">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </div>
@@ -481,7 +481,7 @@
                 </div>
             </script>
 
-            <div class="panel panel-primary panel-add-requirement">
+            <div class="panel panel-blue panel-add-requirement">
                 <div class="panel-heading">
                     @T("Admin.Promotions.Discounts.Requirements.AddNew")
                 </div>

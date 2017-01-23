@@ -10995,14 +10995,8 @@
   <LocaleResource Name="Admin.Promotions.Discounts.Requirements.RequirementGroup.None">
     <Value>None</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Promotions.Discounts.Requirements.RequirementGroup.Remove">
-    <Value>Remove requirement group</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.Requirements.RequirementGroup.Title">
     <Value>Requirement group</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Promotions.Discounts.Requirements.Remove">
-    <Value>Remove requirement</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.Requirements.SaveBeforeEdit">
     <Value>You need to save the discount before you can add requirements for this discount page.</Value>

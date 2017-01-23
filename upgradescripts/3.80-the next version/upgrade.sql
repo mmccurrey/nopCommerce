@@ -761,9 +761,6 @@ set @resources='
   <LocaleResource Name="Admin.Promotions.Discounts.Requirements.RequirementGroup.None">
     <Value>None</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Promotions.Discounts.Requirements.RequirementGroup.Remove">
-    <Value>Remove requirement group</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.Requirements.RequirementGroup.Title">
     <Value>Requirement group</Value>
   </LocaleResource>
@@ -772,6 +769,9 @@ set @resources='
   </LocaleResource>
   <LocaleResource Name="Enums.Nop.Core.Domain.Discounts.RequirementInteractionType.Or">
     <Value>OR</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Discounts.Requirements.Remove">
+    <Value></Value>
   </LocaleResource>
 </Language>
 '
