@@ -122,6 +122,60 @@ ul.common-list {
     background-color: transparent !important;
 }
 
+/*PANELS*/
+.panel-dark-blue {
+    border-color: #487eb5;
+}
+.panel-dark-blue>.panel-heading {
+    color: #fff;
+    background-color: #487eb5;
+    border-color: #487eb5;
+}
+.panel-light-blue {
+    border-color: #60bab6;
+}
+.panel-light-blue>.panel-heading {
+    color: #fff;
+    background-color: #60bab6;
+    border-color: #60bab6;
+}
+
+/*DISCOUNT*/
+.requirement-container .panel-dark-blue{
+    border-right-width: 5px;
+}
+.requirement-container .panel-dark-blue>.panel-heading{
+    border-top-right-radius: 0;
+}
+.requirement-container .panel-dark-blue .panel-dark-blue>.panel-body{
+    background-color: #e7f3ff;
+}
+.requirement-container .panel-light-blue{
+    border-right-width: 2px;
+}
+.requirement-container .panel-light-blue>.panel-heading{
+    border-top-right-radius: 0;
+}
+.requirement-container .panel-light-blue>.panel-body{
+    background-color: #edfffe;
+}
+.requirement-container .panel-group .panel.panel-light-blue+.panel {
+    margin-top: 7px;
+}
+.requirement-container .panel-heading .btn-link {
+    padding: 0;
+    font-size: 15px;
+    color: #fff;
+    float: left;
+}
+.requirement-container .iteraction-type {
+    width: 100px;
+    margin: 10px 0;
+}
+.panel-add-requirement {
+    
+}
+
 /*MODAL WINDOWS*/
 .modal-content {
     text-align: right;

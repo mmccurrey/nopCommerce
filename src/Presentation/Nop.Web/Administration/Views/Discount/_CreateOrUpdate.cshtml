@@ -452,46 +452,36 @@
 
             <!-- Discount requirement template -->
             <script id="discountRequirementTemplate" type="text/html">
-                <div class="panel panel-default" id="editrequirement{{= DiscountRequirementId }}">
-                    <div class="panel-heading">
-                        {{if IsGroup}}
+                <div class="requirement-container" id="editrequirement{{= DiscountRequirementId }}">
+                    <div class="panel {{if IsGroup}}panel-dark-blue{{else}}panel-light-blue{{/if}}">
+                        <div class="panel-heading">
+                            {{if IsGroup}}
                             @T("Admin.Promotions.Discounts.Requirements.RequirementGroup.Title"): <strong>{{= RuleName }}</strong>
-                        {{else}}
+                            {{else}}
                             @T("Admin.Promotions.Discounts.Requirements.DiscountRequirementType"): <strong>{{= RuleName }}</strong>
-                        {{/if}}
-                    </div>
-                    <div class="panel-body">
-                        <div id="editrequirementplaceholder{{= DiscountRequirementId }}"></div>
-                        <div class="form-group pull-right" style="margin-top: 10px;">
-                            <div class="col-md-12">
-                                <div class="input-group input-group-short">
-                                    {{if !IsLastInGroup}}
-                                        <div class="input-group-text">
-                                            <select class="form-control" id="interactiontype{{= DiscountRequirementId }}" name="interactiontype{{= DiscountRequirementId }}"
-                                                onchange="changeInteraction({{= DiscountRequirementId }}, ${ParentId ? ParentId : 'null'}, this.value)">
-                                                {{each AvailableInteractionTypes}}
-                                                    <option value="${Value}" ${Selected == true ? 'selected' : ''}>${Text}</option>
-                                                {{/each}}
-                                            </select>
-                                        </div>
-                                    {{/if}}
-                                    <div class="input-group-btn">
-                                        <button type="button" class="btn bg-red" id="deleterequirement{{= DiscountRequirementId }}" onclick="deleteRequirement({{= DiscountRequirementId }})">
-                                            {{if IsGroup}}
-                                                @T("Admin.Promotions.Discounts.Requirements.RequirementGroup.Remove")
-                                            {{else}}
-                                                @T("Admin.Promotions.Discounts.Requirements.Remove")
-                                            {{/if}}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            {{/if}}
+                            <button type="button" class="btn btn-link" id="deleterequirement{{= DiscountRequirementId }}" onclick="deleteRequirement({ {= DiscountRequirementId }})">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="panel-body">
+                            <div id="editrequirementplaceholder{{= DiscountRequirementId }}"></div>
                         </div>
                     </div>
+                    {{if !IsLastInGroup}}
+                    <div class="iteraction-type">
+                        <select class="form-control" id="interactiontype{{= DiscountRequirementId }}" name="interactiontype{{= DiscountRequirementId }}"
+                                onchange="changeInteraction({{= DiscountRequirementId }}, ${ParentId ? ParentId : 'null'}, this.value)">
+                            {{each AvailableInteractionTypes}}
+                            <option value="${Value}" ${Selected== true ? 'selected' : ''}>${Text}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    {{/if}}
                 </div>
             </script>
 
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-add-requirement">
                 <div class="panel-heading">
                     @T("Admin.Promotions.Discounts.Requirements.AddNew")
                 </div>
