@@ -6140,7 +6140,7 @@ namespace Nop.Services.Installation
                 DeactivateGiftCardsAfterCancellingOrder = false,
                 DeactivateGiftCardsAfterDeletingOrder = false,
                 CompleteOrderWhenDelivered = true,
-                CustomOrderNumberPrefix = "{ID}"
+                CustomOrderNumberMask = "{ID}"
             });
 
             settingService.SaveSetting(new SecuritySettings

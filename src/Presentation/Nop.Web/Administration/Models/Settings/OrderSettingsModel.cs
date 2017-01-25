@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using Nop.Web.Framework;
+﻿using Nop.Web.Framework;
 using Nop.Web.Framework.Mvc;
 
 namespace Nop.Admin.Models.Settings
@@ -101,8 +99,8 @@ namespace Nop.Admin.Models.Settings
         [NopResourceDisplayName("Admin.Configuration.Settings.Order.OrderIdent")]
         public int? OrderIdent { get; set; }
         
-        [NopResourceDisplayName("Admin.Configuration.Settings.Order.CustomOrderNumberPrefix")]
-        public string CustomOrderNumberPrefix { get; set; }
-        public bool CustomOrderNumberPrefix_OverrideForStore { get; set; }
+        [NopResourceDisplayName("Admin.Configuration.Settings.Order.CustomOrderNumberMask")]
+        public string CustomOrderNumberMask { get; set; }
+        public bool CustomOrderNumberMask_OverrideForStore { get; set; }
     }
 }

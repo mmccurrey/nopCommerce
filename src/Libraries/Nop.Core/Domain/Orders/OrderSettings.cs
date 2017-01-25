@@ -122,8 +122,8 @@ namespace Nop.Core.Domain.Orders
         public bool CompleteOrderWhenDelivered { get; set; }
 
         /// <summary>
-        /// Gets or sets a custom order number prefix
+        /// Gets or sets a custom order number mask
         /// </summary>
-        public string CustomOrderNumberPrefix { get; set; }
+        public string CustomOrderNumberMask { get; set; }
     }
 }

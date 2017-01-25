@@ -915,7 +915,7 @@ namespace Nop.Admin.Infrastructure.Mapper
                     .ForMember(dest => dest.AttachPdfInvoiceToOrderCompletedEmail_OverrideForStore, mo => mo.Ignore())
                     .ForMember(dest => dest.CustomProperties, mo => mo.Ignore())
                     .ForMember(dest => dest.ReturnRequestNumberMask_OverrideForStore, mo => mo.Ignore())
-                    .ForMember(dest => dest.CustomOrderNumberPrefix_OverrideForStore, mo => mo.Ignore());
+                    .ForMember(dest => dest.CustomOrderNumberMask_OverrideForStore, mo => mo.Ignore());
                 cfg.CreateMap<OrderSettingsModel, OrderSettings>()
                     .ForMember(dest => dest.GeneratePdfInvoiceInCustomerLanguage, mo => mo.Ignore())
                     .ForMember(dest => dest.ReturnRequestsFileMaximumSize, mo => mo.Ignore())

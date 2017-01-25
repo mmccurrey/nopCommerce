@@ -190,7 +190,7 @@
     <Value>Total cycles</Value>
   </LocaleResource>
   <LocaleResource Name="Account.CustomerOrders.RecurringOrders.ViewInitialOrder">
-    <Value>View order (ID - {0})</Value>
+    <Value>View order (Order number - {0})</Value>
   </LocaleResource>
   <LocaleResource Name="Account.CustomerOrders.ReturnItems">
     <Value>Return Item(s)</Value>
@@ -6552,26 +6552,26 @@
   <LocaleResource Name="Admin.Configuration.Settings.Order.DisableOrderCompletedPage.Hint">
     <Value>When disabled, customers will be automatically redirected to the order details page.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix">
-    <Value>Order number prefix</Value>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask">
+    <Value>Order number mask</Value>
   </LocaleResource> 
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.DD">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.DD">
     <Value>{DD} - day of order creation date</Value>
   </LocaleResource>   
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.ID">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.ID">
     <Value>{ID} -Order identifier</Value>
   </LocaleResource>     
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.MM">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.MM">
     <Value>{MM} - month of order creation date</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.YY">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.YY">
     <Value>{YY} - last two digits of year of order creation date</Value>
   </LocaleResource> 
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.YYYY">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.YYYY">
     <Value>{YYYY} - year of order creation date</Value>
   </LocaleResource>  
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Hint">
-    <Value>Order number prefix, for creating custom order number. For example, RE-{YYYY}-{MM}. Leave this field empty if you don't want to use custom order numbers</Value>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Hint">
+    <Value>Order number mask, for creating custom order number. For example, RE-{YYYY}-{MM}. Leave this field empty if you don't want to use custom order numbers</Value>
   </LocaleResource>      
   <LocaleResource Name="Admin.Configuration.Settings.Order.IsReOrderAllowed">
     <Value>Is re-order allowed</Value>

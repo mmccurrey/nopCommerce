@@ -62,10 +62,10 @@ namespace Nop.Services.Orders
 
         public virtual string GenerateOrderCustomNumber(Order order)
         {
-            if (string.IsNullOrEmpty(_orderSettings.CustomOrderNumberPrefix))
+            if (string.IsNullOrEmpty(_orderSettings.CustomOrderNumberMask))
                 return order.Id.ToString();
 
-            var customNumber = _orderSettings.CustomOrderNumberPrefix
+            var customNumber = _orderSettings.CustomOrderNumberMask
                 .Replace("{ID}", order.Id.ToString())
                 .Replace("{YYYY}", order.CreatedOnUtc.ToString("yyyy"))
                 .Replace("{YY}", order.CreatedOnUtc.ToString("yy"))

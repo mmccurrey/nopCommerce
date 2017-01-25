@@ -1376,25 +1376,25 @@ set @resources='
   <LocaleResource Name="Admin.Orders.Shipments.CustomOrderNumber.Hint">
     <Value>The order associated to this shipment.</Value>
   </LocaleResource>  
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix">
-    <Value>Order number prefix</Value>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask">
+    <Value>Order number mask</Value>
   </LocaleResource>  
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Hint">
-    <Value>Order number prefix, for creating custom order number. For example, RE-{YYYY}-{MM}. Leave this field empty if you don''t want to use custom order numbers</Value>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Hint">
+    <Value>Order number mask, for creating custom order number. For example, RE-{YYYY}-{MM}. Leave this field empty if you don''t want to use custom order numbers</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.DD">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.DD">
     <Value>{DD} - day of order creation date</Value>
   </LocaleResource>   
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.ID">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.ID">
     <Value>{ID} -Order identifier</Value>
   </LocaleResource>     
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.MM">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.MM">
     <Value>{MM} - month of order creation date</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.YYYY">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.YYYY">
     <Value>{YYYY} - year of order creation date</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberPrefix.Description.YY">
+  <LocaleResource Name="Admin.Configuration.Settings.Order.CustomOrderNumberMask.Description.YY">
     <Value>{YY} - last two digits of year of order creation date</Value>
   </LocaleResource>    
   <LocaleResource Name="Admin.GiftCards.Fields.Order">
@@ -1417,6 +1417,9 @@ set @resources='
   </LocaleResource>   
   <LocaleResource Name="ActivityLog.EditOrder">
     <Value>Edited an order (Order number = {0}). See order notes for details</Value>
+  </LocaleResource> 
+  <LocaleResource Name="Account.CustomerOrders.RecurringOrders.ViewInitialOrder">
+    <Value>View order (Order number - {0})</Value>
   </LocaleResource>  
 </Language>
 '
@@ -3746,9 +3749,9 @@ ALTER TABLE [Order] ALTER COLUMN [CustomOrderNumber] nvarchar(MAX) NOT NULL
 GO
 
  --new setting
-IF NOT EXISTS (SELECT 1 FROM [Setting] WHERE [name] = N'ordersettings.customordernumberprefix')
+IF NOT EXISTS (SELECT 1 FROM [Setting] WHERE [name] = N'ordersettings.customordernumbermask')
 BEGIN
     INSERT [Setting] ([Name], [Value], [StoreId])
-    VALUES (N'ordersettings.customordernumberprefix', N'{ID}', 0)
+    VALUES (N'ordersettings.customordernumbermask', N'{ID}', 0)
 END
 GO
