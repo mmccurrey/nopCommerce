@@ -253,34 +253,7 @@ namespace Nop.Services.ExportImport
             }
             return new[] { picture1, picture2, picture3 };
         }
-
-        protected virtual decimal GetOrderTotal(Order order)
-        {
-            if (_workContext.CurrentVendor == null)
-            {
-                return order.OrderTotal;
-            }
-
-            decimal total = 0;
-
-            //a vendor should have access only to his products
-            foreach (var orderItem in order.OrderItems.Where(p => p.Product.VendorId == _workContext.CurrentVendor.Id))
-            {
-                if (order.CustomerTaxDisplayType == TaxDisplayType.IncludingTax)
-                {
-                    //including tax
-                    total += orderItem.PriceInclTax;
-                }
-                else
-                {
-                    //excluding tax
-                    total += orderItem.PriceExclTax;
-                }
-            }
-
-            return total;
-        }
-
+       
         private bool IgnoreExportPoductProperty(Func<ProductEditorSettings, bool> func)
         {
             var productAdvancedMode = _workContext.CurrentCustomer.GetAttribute<bool>("product-advanced-mode");
@@ -1125,7 +1098,7 @@ namespace Nop.Services.ExportImport
                 xmlWriter.WriteString("PaymentMethodAdditionalFeeExclTax", order.PaymentMethodAdditionalFeeExclTax, ignore);
                 xmlWriter.WriteString("TaxRates", order.TaxRates, ignore);
                 xmlWriter.WriteString("OrderTax", order.OrderTax, ignore);
-                xmlWriter.WriteString("OrderTotal", GetOrderTotal(order));
+                xmlWriter.WriteString("OrderTotal", order.OrderTotal, ignore);
                 xmlWriter.WriteString("RefundedAmount", order.RefundedAmount, ignore);
                 xmlWriter.WriteString("OrderDiscount", order.OrderDiscount, ignore);
                 xmlWriter.WriteString("CurrencyRate", order.CurrencyRate);
@@ -1254,7 +1227,7 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Order>("PaymentMethodAdditionalFeeExclTax", p => p.PaymentMethodAdditionalFeeExclTax, ignore),
                 new PropertyByName<Order>("TaxRates", p => p.TaxRates, ignore),
                 new PropertyByName<Order>("OrderTax", p => p.OrderTax, ignore),
-                new PropertyByName<Order>("OrderTotal", p => GetOrderTotal(p)),
+                new PropertyByName<Order>("OrderTotal", p => p.OrderTotal, ignore),
                 new PropertyByName<Order>("RefundedAmount", p => p.RefundedAmount, ignore),
                 new PropertyByName<Order>("OrderDiscount", p => p.OrderDiscount, ignore),
                 new PropertyByName<Order>("CurrencyRate", p => p.CurrencyRate),
