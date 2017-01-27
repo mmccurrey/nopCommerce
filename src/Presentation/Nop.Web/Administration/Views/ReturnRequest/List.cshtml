@@ -128,9 +128,14 @@
                                             }, {
                                                 field: "ProductName",
                                                 title: "@T("Admin.ReturnRequests.Fields.Product")",
-                                                width: 200,
+                                                width: 150,
                                                 template:
                                                     '# if(ProductId > 0) {# <a href="@Url.Content("~/Admin/Product/Edit/")#=ProductId#">#:ProductName#</a> #} else {# order item is deleted #} #'
+                                            }, {
+                                                field: "AttributeDescription",
+                                                title: "@T("Admin.ReturnRequests.Fields.AttributeDescription")",
+                                                width: 150,
+                                                encoded: false
                                             }, {
                                                 field: "Quantity",
                                                 title: "@T("Admin.ReturnRequests.Fields.Quantity")",
@@ -144,7 +149,7 @@
                                             }, {
                                                 field: "OrderId",
                                                 title: "@T("Admin.ReturnRequests.Fields.Order")",
-                                                width: 200,
+                                                width: 100,
                                                 template:
                                                     '# if(OrderId > 0) {# <a href="@Url.Content("~/Admin/Order/Edit/")#=OrderId#">#=OrderId# - @T("Admin.Common.View")</a> #} else {# order item is deleted #} #'
                                             }, {

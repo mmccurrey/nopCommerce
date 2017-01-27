@@ -11466,6 +11466,12 @@
   <LocaleResource Name="Admin.ReturnRequests.EditReturnRequestDetails">
     <Value>Edit return request details</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.ReturnRequests.Fields.AttributeDescription">
+    <Value>Attributes</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.ReturnRequests.Fields.AttributeDescription.Hint">
+    <Value>Product attributes information.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.ReturnRequests.Fields.CreatedOn">
     <Value>Date</Value>
   </LocaleResource>

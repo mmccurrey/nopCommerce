@@ -25,6 +25,9 @@ namespace Nop.Admin.Models.Orders
         [NopResourceDisplayName("Admin.ReturnRequests.Fields.Product")]
         public string ProductName { get; set; }
 
+        [NopResourceDisplayName("Admin.ReturnRequests.Fields.AttributeDescription")]
+        public string AttributeDescription { get; set; }
+
         [NopResourceDisplayName("Admin.ReturnRequests.Fields.Quantity")]
         public int Quantity { get; set; }
 

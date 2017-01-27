@@ -1423,7 +1423,13 @@ set @resources='
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.News.Comments.List.SearchApproved.DisapprovedOnly">
     <Value>Disapproved only</Value>
-  </LocaleResource>     
+  </LocaleResource> 
+  <LocaleResource Name="Admin.ReturnRequests.Fields.AttributeDescription">
+    <Value>Attributes</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.ReturnRequests.Fields.AttributeDescription.Hint">
+    <Value>Product attributes information.</Value>
+  </LocaleResource>    
 </Language>
 '
 
