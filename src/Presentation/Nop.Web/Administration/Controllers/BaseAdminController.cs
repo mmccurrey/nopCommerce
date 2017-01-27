@@ -41,7 +41,7 @@ namespace Nop.Admin.Controllers
         /// Access denied view
         /// </summary>
         /// <returns>Access denied view</returns>
-        protected ActionResult AccessDeniedView()
+        protected virtual ActionResult AccessDeniedView()
         {
             //return new HttpUnauthorizedResult();
             return RedirectToAction("AccessDenied", "Security", new { pageUrl = this.Request.RawUrl });

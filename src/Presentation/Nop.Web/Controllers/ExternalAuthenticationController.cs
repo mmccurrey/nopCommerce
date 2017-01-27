@@ -34,7 +34,7 @@ namespace Nop.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult ExternalMethods()
+        public virtual ActionResult ExternalMethods()
         {
             var model = _externalAuthenticationModelFactory.PrepareExternalMethodsModel();
             return PartialView(model);
