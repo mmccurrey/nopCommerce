@@ -11,8 +11,9 @@
 	$(document).ready(function () {
 
 		$("#@Html.FieldIdFor(model => model.EnableIpn)").click(toggleEnableIpn);
-
-		toggleEnableIpn();
+        $("#@Html.FieldIdFor(model => model.PassProductNamesAndTotals)").click(togglePassProductNamesAndTotals);
+	    toggleEnableIpn();
+	    togglePassProductNamesAndTotals();
 	});
 
 	function toggleEnableIpn() {
@@ -22,8 +23,12 @@
 		else {
 			$('#pnlIpnUrl').hide();
 		}
-	}
+	};
 
+    function togglePassProductNamesAndTotals() {
+        warningValidation('@Url.Action("RoundingWarning", "PaymentPayPalStandard")', '@Html.FieldNameFor(model => model.PassProductNamesAndTotals)',
+            { passProductNamesAndTotals: $('#@Html.FieldIdFor(model => model.PassProductNamesAndTotals)').is(':checked') });
+    };
 </script>
 
 @using (Html.BeginForm())

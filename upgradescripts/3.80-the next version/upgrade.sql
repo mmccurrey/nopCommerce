@@ -1423,7 +1423,10 @@ set @resources='
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.News.Comments.List.SearchApproved.DisapprovedOnly">
     <Value>Disapproved only</Value>
-  </LocaleResource>     
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Payments.PayPalStandard.RoundingWarning">
+    <Value>It looks like you have disabled RoundPricesDuringCalculation in the shopping cart settings, keep in mind that this can lead to a discrepancy of the order total amount, as PayPal only rounds to two decimal</Value>
+  </LocaleResource>   
 </Language>
 '
 
