@@ -270,9 +270,10 @@ namespace Nop.Web.Controllers
         /// </summary>
         /// <param name="product">Product</param>
         /// <param name="form">Form</param>
+        /// <param name="errors">Errors</param>
         /// <returns>Parsed attributes</returns>
         [NonAction]
-        protected virtual string ParseProductAttributes(Product product, FormCollection form)
+        protected virtual string ParseProductAttributes(Product product, FormCollection form, List<string> errors)
         {
             string attributesXml = "";
 
@@ -292,12 +293,18 @@ namespace Nop.Web.Controllers
                             var ctrlAttributes = form[controlId];
                             if (!String.IsNullOrEmpty(ctrlAttributes))
                             {
-                                int quantity;
                                 int selectedAttributeId = int.Parse(ctrlAttributes);
                                 if (selectedAttributeId > 0)
-                                    attributesXml = _productAttributeParser.AddProductAttribute(attributesXml,
-                                        attribute, selectedAttributeId.ToString(),
-                                        int.TryParse(form[string.Format("product_attribute_{0}_{1}_qty", attribute.Id, selectedAttributeId)], out quantity) && quantity > 1 ? (int?)quantity : null);
+                                {
+                                    //get quantity entered by customer
+                                    var quantity = 1;
+                                    var quantityStr = form[string.Format("product_attribute_{0}_{1}_qty", attribute.Id, selectedAttributeId)];
+                                    if (quantityStr != null && (!int.TryParse(quantityStr, out quantity) || quantity < 1))
+                                        errors.Add(_localizationService.GetResource("ShoppingCart.QuantityShouldPositive"));
+
+                                    attributesXml = _productAttributeParser.AddProductAttribute(attributesXml, 
+                                        attribute, selectedAttributeId.ToString(), quantity > 1 ? (int?)quantity : null);
+                                }
                             }
                         }
                         break;
@@ -308,12 +315,18 @@ namespace Nop.Web.Controllers
                             {
                                 foreach (var item in ctrlAttributes.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                                 {
-                                    int quantity;
                                     int selectedAttributeId = int.Parse(item);
                                     if (selectedAttributeId > 0)
+                                    {
+                                        //get quantity entered by customer
+                                        var quantity = 1;
+                                        var quantityStr = form[string.Format("product_attribute_{0}_{1}_qty", attribute.Id, item)];
+                                        if (quantityStr != null && (!int.TryParse(quantityStr, out quantity) || quantity < 1))
+                                            errors.Add(_localizationService.GetResource("ShoppingCart.QuantityShouldPositive"));
+
                                         attributesXml = _productAttributeParser.AddProductAttribute(attributesXml,
-                                            attribute, selectedAttributeId.ToString(),
-                                            int.TryParse(form[string.Format("product_attribute_{0}_{1}_qty", attribute.Id, item)], out quantity) && quantity > 1 ? (int?)quantity : null);
+                                            attribute, selectedAttributeId.ToString(), quantity > 1 ? (int?)quantity : null);
+                                    }
                                 }
                             }
                         }
@@ -327,10 +340,14 @@ namespace Nop.Web.Controllers
                                 .Select(v => v.Id)
                                 .ToList())
                             {
-                                int quantity;
+                                //get quantity entered by customer
+                                var quantity = 1;
+                                var quantityStr = form[string.Format("product_attribute_{0}_{1}_qty", attribute.Id, selectedAttributeId)];
+                                if (quantityStr != null && (!int.TryParse(quantityStr, out quantity) || quantity < 1))
+                                    errors.Add(_localizationService.GetResource("ShoppingCart.QuantityShouldPositive"));
+
                                 attributesXml = _productAttributeParser.AddProductAttribute(attributesXml,
-                                    attribute, selectedAttributeId.ToString(),
-                                    int.TryParse(form[string.Format("product_attribute_{0}_{1}_qty", attribute.Id, selectedAttributeId)], out quantity) && quantity > 1 ? (int?)quantity : null);
+                                    attribute, selectedAttributeId.ToString(), quantity > 1 ? (int?)quantity : null);
                             }
                         }
                         break;
@@ -476,7 +493,7 @@ namespace Nop.Web.Controllers
         //add product to cart using AJAX
         //currently we use this method on catalog pages (category/manufacturer/etc)
         [HttpPost]
-        public ActionResult AddProductToCart_Catalog(int productId, int shoppingCartTypeId,
+        public virtual ActionResult AddProductToCart_Catalog(int productId, int shoppingCartTypeId,
             int quantity, bool forceredirection = false)
         {
             var cartType = (ShoppingCartType)shoppingCartTypeId;
@@ -678,7 +695,7 @@ namespace Nop.Web.Controllers
         //currently we use this method on the product details pages
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult AddProductToCart_Details(int productId, int shoppingCartTypeId, FormCollection form)
+        public virtual ActionResult AddProductToCart_Details(int productId, int shoppingCartTypeId, FormCollection form)
         {
             var product = _productService.GetProductById(productId);
             if (product == null)
@@ -768,8 +785,10 @@ namespace Nop.Web.Controllers
 
             #endregion
 
+            var addToCartWarnings = new List<string>();
+
             //product and gift card attributes
-            string attributes = ParseProductAttributes(product, form);
+            string attributes = ParseProductAttributes(product, form, addToCartWarnings);
             
             //rental attributes
             DateTime? rentalStartDate = null;
@@ -784,7 +803,6 @@ namespace Nop.Web.Controllers
                 updatecartitem.ShoppingCartType;
 
             //save item
-            var addToCartWarnings = new List<string>();
             if (updatecartitem == null)
             {
                 //add to the cart
@@ -909,14 +927,15 @@ namespace Nop.Web.Controllers
         //currently we use this method on the product details pages
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult ProductDetails_AttributeChange(int productId, bool validateAttributeConditions,
+        public virtual ActionResult ProductDetails_AttributeChange(int productId, bool validateAttributeConditions,
             bool loadPicture, FormCollection form)
         {
             var product = _productService.GetProductById(productId);
             if (product == null)
                 return new NullJsonResult();
 
-            string attributeXml = ParseProductAttributes(product, form);
+            var errors = new List<string>();
+            string attributeXml = ParseProductAttributes(product, form, errors);
 
             //rental attributes
             DateTime? rentalStartDate = null;
@@ -1016,13 +1035,14 @@ namespace Nop.Web.Controllers
                 enabledattributemappingids = enabledAttributeMappingIds.ToArray(),
                 disabledattributemappingids = disabledAttributeMappingIds.ToArray(),
                 pictureFullSizeUrl = pictureFullSizeUrl,
-                pictureDefaultSizeUrl = pictureDefaultSizeUrl
+                pictureDefaultSizeUrl = pictureDefaultSizeUrl,
+                message = errors.Any() ? errors.ToArray() : null
             });
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult CheckoutAttributeChange(FormCollection form)
+        public virtual ActionResult CheckoutAttributeChange(FormCollection form)
         {
             var cart = _workContext.CurrentCustomer.ShoppingCartItems
                 .Where(sci => sci.ShoppingCartType == ShoppingCartType.ShoppingCart)
@@ -1056,7 +1076,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadFileProductAttribute(int attributeId)
+        public virtual ActionResult UploadFileProductAttribute(int attributeId)
         {
             var attribute = _productAttributeService.GetProductAttributeMappingById(attributeId);
             if (attribute == null || attribute.AttributeControlType != AttributeControlType.FileUpload)
@@ -1140,7 +1160,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadFileCheckoutAttribute(int attributeId)
+        public virtual ActionResult UploadFileCheckoutAttribute(int attributeId)
         {
             var attribute = _checkoutAttributeService.GetCheckoutAttributeById(attributeId);
             if (attribute == null || attribute.AttributeControlType != AttributeControlType.FileUpload)
@@ -1224,7 +1244,7 @@ namespace Nop.Web.Controllers
         }
         
         [NopHttpsRequirement(SslRequirement.Yes)]
-        public ActionResult Cart()
+        public virtual ActionResult Cart()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart))
                 return RedirectToRoute("HomePage");
@@ -1239,7 +1259,7 @@ namespace Nop.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult OrderSummary(bool? prepareAndDisplayOrderReviewData)
+        public virtual ActionResult OrderSummary(bool? prepareAndDisplayOrderReviewData)
         {
             var cart = _workContext.CurrentCustomer.ShoppingCartItems
                 .Where(sci => sci.ShoppingCartType == ShoppingCartType.ShoppingCart)
@@ -1256,7 +1276,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("updatecart")]
-        public ActionResult UpdateCart(FormCollection form)
+        public virtual ActionResult UpdateCart(FormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart))
                 return RedirectToRoute("HomePage");
@@ -1323,7 +1343,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("continueshopping")]
-        public ActionResult ContinueShopping()
+        public virtual ActionResult ContinueShopping()
         {
             var returnUrl = _workContext.CurrentCustomer.GetAttribute<string>(SystemCustomerAttributeNames.LastContinueShoppingPage, _storeContext.CurrentStore.Id);
             if (!String.IsNullOrEmpty(returnUrl))
@@ -1339,7 +1359,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("checkout")]
-        public ActionResult StartCheckout(FormCollection form)
+        public virtual ActionResult StartCheckout(FormCollection form)
         {
             var cart = _workContext.CurrentCustomer.ShoppingCartItems
                 .Where(sci => sci.ShoppingCartType == ShoppingCartType.ShoppingCart)
@@ -1379,7 +1399,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("applydiscountcouponcode")]
-        public ActionResult ApplyDiscountCoupon(string discountcouponcode, FormCollection form)
+        public virtual ActionResult ApplyDiscountCoupon(string discountcouponcode, FormCollection form)
         {
             //trim
             if (discountcouponcode != null)
@@ -1403,68 +1423,49 @@ namespace Nop.Web.Controllers
                     .ToList();
                 if (discounts.Any())
                 {
-                    string userError = "";
-                    bool anyValidDiscount = false;
-                    foreach (var discount in discounts)
+                    var userErrors = new List<string>();
+                    var anyValidDiscount = discounts.Any(discount =>
                     {
                         var validationResult = _discountService.ValidateDiscount(discount, _workContext.CurrentCustomer, new[] { discountcouponcode });
-                        if (validationResult.IsValid)
-                        {
-                            anyValidDiscount = true;
-                            break;
-                        }
-                        else
-                        {
-                            if (!String.IsNullOrEmpty(validationResult.UserError))
-                                userError = validationResult.UserError;
-                        }
-                    }
+                        userErrors.AddRange(validationResult.Errors);
+
+                        return validationResult.IsValid;
+                    });
 
                     if (anyValidDiscount)
                     {
                         //valid
                         _workContext.CurrentCustomer.ApplyDiscountCouponCode(discountcouponcode);
-                        model.DiscountBox.Message = _localizationService.GetResource("ShoppingCart.DiscountCouponCode.Applied");
+                        model.DiscountBox.Messages.Add(_localizationService.GetResource("ShoppingCart.DiscountCouponCode.Applied"));
                         model.DiscountBox.IsApplied = true;
                     }
                     else
                     {
-                        if (!String.IsNullOrEmpty(userError))
-                        {
-                            //some user error
-                            model.DiscountBox.Message = userError;
-                            model.DiscountBox.IsApplied = false;
-                        }
+                        if (userErrors.Any())
+                            //some user errors
+                            model.DiscountBox.Messages = userErrors;
                         else
-                        {
                             //general error text
-                            model.DiscountBox.Message = _localizationService.GetResource("ShoppingCart.DiscountCouponCode.WrongDiscount");
-                            model.DiscountBox.IsApplied = false;
-                        }
+                            model.DiscountBox.Messages.Add(_localizationService.GetResource("ShoppingCart.DiscountCouponCode.WrongDiscount"));
                     }
                 }
                 else
-                {
                     //discount cannot be found
-                    model.DiscountBox.Message = _localizationService.GetResource("ShoppingCart.DiscountCouponCode.WrongDiscount");
-                    model.DiscountBox.IsApplied = false;
-                }
+                    model.DiscountBox.Messages.Add(_localizationService.GetResource("ShoppingCart.DiscountCouponCode.WrongDiscount"));
             }
             else
-            {
                 //empty coupon code
-                model.DiscountBox.Message = _localizationService.GetResource("ShoppingCart.DiscountCouponCode.WrongDiscount");
-                model.DiscountBox.IsApplied = false;
-            }
+                model.DiscountBox.Messages.Add(_localizationService.GetResource("ShoppingCart.DiscountCouponCode.WrongDiscount"));
 
             model = _shoppingCartModelFactory.PrepareShoppingCartModel(model, cart);
+
             return View(model);
         }
 
         [ValidateInput(false)]
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("applygiftcardcouponcode")]
-        public ActionResult ApplyGiftCard(string giftcardcouponcode, FormCollection form)
+        public virtual ActionResult ApplyGiftCard(string giftcardcouponcode, FormCollection form)
         {
             //trim
             if (giftcardcouponcode != null)
@@ -1517,7 +1518,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [PublicAntiForgery]
         [HttpPost]
-        public ActionResult GetEstimateShipping(int? countryId, int? stateProvinceId, string zipPostalCode, FormCollection form)
+        public virtual ActionResult GetEstimateShipping(int? countryId, int? stateProvinceId, string zipPostalCode, FormCollection form)
         {
             var cart = _workContext.CurrentCustomer.ShoppingCartItems
                 .Where(sci => sci.ShoppingCartType == ShoppingCartType.ShoppingCart)
@@ -1532,7 +1533,7 @@ namespace Nop.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult OrderTotals(bool isEditable)
+        public virtual ActionResult OrderTotals(bool isEditable)
         {
             var cart = _workContext.CurrentCustomer.ShoppingCartItems
                 .Where(sci => sci.ShoppingCartType == ShoppingCartType.ShoppingCart)
@@ -1546,7 +1547,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Cart")]
         [FormValueRequired(FormValueRequirement.StartsWith, "removediscount-")]
-        public ActionResult RemoveDiscountCoupon(FormCollection form)
+        public virtual ActionResult RemoveDiscountCoupon(FormCollection form)
         {
             var model = new ShoppingCartModel();
 
@@ -1571,7 +1572,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Cart")]
         [FormValueRequired(FormValueRequirement.StartsWith, "removegiftcard-")]
-        public ActionResult RemoveGiftCardCode(FormCollection form)
+        public virtual ActionResult RemoveGiftCardCode(FormCollection form)
         {
             var model = new ShoppingCartModel();
 
@@ -1593,7 +1594,7 @@ namespace Nop.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult FlyoutShoppingCart()
+        public virtual ActionResult FlyoutShoppingCart()
         {
             if (!_shoppingCartSettings.MiniShoppingCartEnabled)
                 return Content("");
@@ -1610,7 +1611,7 @@ namespace Nop.Web.Controllers
         #region Wishlist
 
         [NopHttpsRequirement(SslRequirement.Yes)]
-        public ActionResult Wishlist(Guid? customerGuid)
+        public virtual ActionResult Wishlist(Guid? customerGuid)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist))
                 return RedirectToRoute("HomePage");
@@ -1632,7 +1633,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Wishlist")]
         [FormValueRequired("updatecart")]
-        public ActionResult UpdateWishlist(FormCollection form)
+        public virtual ActionResult UpdateWishlist(FormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist))
                 return RedirectToRoute("HomePage");
@@ -1700,7 +1701,7 @@ namespace Nop.Web.Controllers
         [ValidateInput(false)]
         [HttpPost, ActionName("Wishlist")]
         [FormValueRequired("addtocartbutton")]
-        public ActionResult AddItemsToCartFromWishlist(Guid? customerGuid, FormCollection form)
+        public virtual ActionResult AddItemsToCartFromWishlist(Guid? customerGuid, FormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart))
                 return RedirectToRoute("HomePage");
@@ -1779,7 +1780,7 @@ namespace Nop.Web.Controllers
         }
 
         [NopHttpsRequirement(SslRequirement.Yes)]
-        public ActionResult EmailWishlist()
+        public virtual ActionResult EmailWishlist()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist) || !_shoppingCartSettings.EmailWishlistEnabled)
                 return RedirectToRoute("HomePage");
@@ -1801,7 +1802,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("send-email")]
         [CaptchaValidator]
-        public ActionResult EmailWishlistSend(WishlistEmailAFriendModel model, bool captchaValid)
+        public virtual ActionResult EmailWishlistSend(WishlistEmailAFriendModel model, bool captchaValid)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist) || !_shoppingCartSettings.EmailWishlistEnabled)
                 return RedirectToRoute("HomePage");

@@ -4,16 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Nop.Core;
-using Nop.Core.Caching;
-using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Orders;
-using Nop.Services.Catalog;
 using Nop.Services.Customers;
-using Nop.Services.Directory;
-using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Media;
 using Nop.Services.Messages;
@@ -80,7 +75,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [NopHttpsRequirement(SslRequirement.Yes)]
-        public ActionResult CustomerReturnRequests()
+        public virtual ActionResult CustomerReturnRequests()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return new HttpUnauthorizedResult();
@@ -90,7 +85,7 @@ namespace Nop.Web.Controllers
         }
 
         [NopHttpsRequirement(SslRequirement.Yes)]
-        public ActionResult ReturnRequest(int orderId)
+        public virtual ActionResult ReturnRequest(int orderId)
         {
             var order = _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
@@ -107,7 +102,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("ReturnRequest")]
         [ValidateInput(false)]
         [PublicAntiForgery]
-        public ActionResult ReturnRequestSubmit(int orderId, SubmitReturnRequestModel model, FormCollection form)
+        public virtual ActionResult ReturnRequestSubmit(int orderId, SubmitReturnRequestModel model, FormCollection form)
         {
             var order = _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
@@ -182,7 +177,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadFileReturnRequest()
+        public virtual ActionResult UploadFileReturnRequest()
         {
             if (!_orderSettings.ReturnRequestsEnabled && !_orderSettings.ReturnRequestsAllowFiles)
             {

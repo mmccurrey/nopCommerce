@@ -43,6 +43,8 @@ namespace Nop.Admin.Models.Customers
 
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.Password")]
         [AllowHtml]
+        [DataType(DataType.Password)]
+        [NoTrim]
         public string Password { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.Vendor")]
@@ -290,8 +292,9 @@ namespace Nop.Admin.Models.Customers
 
         public partial class OrderModel : BaseNopEntityModel
         {
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.ID")]
             public override int Id { get; set; }
+            [NopResourceDisplayName("Admin.Customers.Customers.Orders.CustomOrderNumber")]
+            public string CustomOrderNumber { get; set; }
 
             [NopResourceDisplayName("Admin.Customers.Customers.Orders.OrderStatus")]
             public string OrderStatus { get; set; }

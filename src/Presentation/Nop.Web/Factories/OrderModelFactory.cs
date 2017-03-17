@@ -22,6 +22,9 @@ using Nop.Web.Models.Order;
 
 namespace Nop.Web.Factories
 {
+    /// <summary>
+    /// Represents the order model factory
+    /// </summary>
     public partial class OrderModelFactory : IOrderModelFactory
     {
         #region Fields
@@ -109,6 +112,10 @@ namespace Nop.Web.Factories
 
         #region Methods
 
+        /// <summary>
+        /// Prepare the customer order list model
+        /// </summary>
+        /// <returns>Customer order list model</returns>
         public virtual CustomerOrderListModel PrepareCustomerOrderListModel()
         {
             var model = new CustomerOrderListModel();
@@ -124,7 +131,8 @@ namespace Nop.Web.Factories
                     OrderStatus = order.OrderStatus.GetLocalizedEnum(_localizationService, _workContext),
                     PaymentStatus = order.PaymentStatus.GetLocalizedEnum(_localizationService, _workContext),
                     ShippingStatus = order.ShippingStatus.GetLocalizedEnum(_localizationService, _workContext),
-                    IsReturnRequestAllowed = _orderProcessingService.IsReturnRequestAllowed(order)
+                    IsReturnRequestAllowed = _orderProcessingService.IsReturnRequestAllowed(order),
+                    CustomOrderNumber = order.CustomOrderNumber
                 };
                 var orderTotalInCustomerCurrency = _currencyService.ConvertCurrency(order.OrderTotal, order.CurrencyRate);
                 orderModel.OrderTotal = _priceFormatter.FormatPrice(orderTotalInCustomerCurrency, true, order.CustomerCurrencyCode, false, _workContext.WorkingLanguage);
@@ -145,6 +153,7 @@ namespace Nop.Web.Factories
                     TotalCycles = recurringPayment.TotalCycles,
                     CyclesRemaining = recurringPayment.CyclesRemaining,
                     InitialOrderId = recurringPayment.InitialOrder.Id,
+                    InitialOrderNumber = recurringPayment.InitialOrder.CustomOrderNumber,
                     CanCancel = _orderProcessingService.CanCancelRecurringPayment(_workContext.CurrentCustomer, recurringPayment),
                     CanRetryLastPayment = _orderProcessingService.CanRetryLastRecurringPayment(_workContext.CurrentCustomer, recurringPayment)
                 };
@@ -155,6 +164,11 @@ namespace Nop.Web.Factories
             return model;
         }
 
+        /// <summary>
+        /// Prepare the order details model
+        /// </summary>
+        /// <param name="order">Order</param>
+        /// <returns>Order details model</returns>
         public virtual OrderDetailsModel PrepareOrderDetailsModel(Order order)
         {
             if (order == null)
@@ -167,6 +181,7 @@ namespace Nop.Web.Factories
             model.IsReOrderAllowed = _orderSettings.IsReOrderAllowed;
             model.IsReturnRequestAllowed = _orderProcessingService.IsReturnRequestAllowed(order);
             model.PdfInvoiceDisabled = _pdfSettings.DisablePdfInvoicesForPendingOrders && order.OrderStatus == OrderStatus.Pending;
+            model.CustomOrderNumber = order.CustomOrderNumber;
 
             //shipping info
             model.ShippingStatus = order.ShippingStatus.GetLocalizedEnum(_localizationService, _workContext);
@@ -421,6 +436,11 @@ namespace Nop.Web.Factories
             return model;
         }
 
+        /// <summary>
+        /// Prepare the shipment details model
+        /// </summary>
+        /// <param name="shipment">Shipment</param>
+        /// <returns>Shipment details model</returns>
         public virtual ShipmentDetailsModel PrepareShipmentDetailsModel(Shipment shipment)
         {
             if (shipment == null)
@@ -501,6 +521,11 @@ namespace Nop.Web.Factories
             return model;
         }
 
+        /// <summary>
+        /// Prepare the customer reward points model
+        /// </summary>
+        /// <param name="page">Number of items page; pass null to load the first page</param>
+        /// <returns>Customer reward points model</returns>
         public virtual CustomerRewardPointsModel PrepareCustomerRewardPoints(int? page)
         {
             var customer = _workContext.CurrentCustomer;

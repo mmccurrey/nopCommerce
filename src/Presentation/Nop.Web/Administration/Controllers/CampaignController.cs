@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 using Nop.Admin.Extensions;
 using Nop.Admin.Models.Messages;
@@ -130,12 +129,12 @@ namespace Nop.Admin.Controllers
             return emailAccount;
         }
 
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             return RedirectToAction("List");
         }
 
-		public ActionResult List()
+		public virtual ActionResult List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -162,10 +161,10 @@ namespace Nop.Admin.Controllers
 		}
 
         [HttpPost]
-        public ActionResult List(DataSourceRequest command, CampaignListModel searchModel)
+        public virtual ActionResult List(DataSourceRequest command, CampaignListModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
-                return AccessDeniedView();
+                return AccessDeniedKendoGridJson();
 
             var campaigns = _campaignService.GetAllCampaigns(searchModel.StoreId);
             var gridModel = new DataSourceResult
@@ -183,7 +182,7 @@ namespace Nop.Admin.Controllers
             return Json(gridModel);
         }
 
-        public ActionResult Create()
+        public virtual ActionResult Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -202,7 +201,7 @@ namespace Nop.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public ActionResult Create(CampaignModel model, bool continueEditing)
+        public virtual ActionResult Create(CampaignModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -234,7 +233,7 @@ namespace Nop.Admin.Controllers
             return View(model);
         }
 
-		public ActionResult Edit(int id)
+		public virtual ActionResult Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -262,7 +261,7 @@ namespace Nop.Admin.Controllers
         [HttpPost]
         [ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public ActionResult Edit(CampaignModel model, bool continueEditing)
+        public virtual ActionResult Edit(CampaignModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -300,7 +299,7 @@ namespace Nop.Admin.Controllers
 
         [HttpPost,ActionName("Edit")]
         [FormValueRequired("send-test-email")]
-        public ActionResult SendTestEmail(CampaignModel model)
+        public virtual ActionResult SendTestEmail(CampaignModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -356,7 +355,7 @@ namespace Nop.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("send-mass-email")]
-        public ActionResult SendMassEmail(CampaignModel model)
+        public virtual ActionResult SendMassEmail(CampaignModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -398,7 +397,7 @@ namespace Nop.Admin.Controllers
         }
 
 		[HttpPost]
-        public ActionResult Delete(int id)
+        public virtual ActionResult Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
